@@ -9,7 +9,7 @@ class AppRoutes{
   static const String professorSearch = '/professorSearch';
 
   static final routes = <String, WidgetBuilder>{
-    login: (context) => const LoginScreen(),
+    login: (context) => LoginScreen(),
     studentHome: (context) => const StudentHomeScreen(),
     professorSearch: (context) => const SearchScreen(),
   };
