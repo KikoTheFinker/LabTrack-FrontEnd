@@ -3,6 +3,7 @@ import 'package:lab_track/features/auth/auth.dart';
 import 'package:provider/provider.dart';
 import '../../../core/widgets/animated_fade_widget.dart';
 import '../../../core/utils/validators.dart';
+import '../../../core/widgets/toggle_password_field.dart';
 
 class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -76,15 +77,9 @@ class LoginScreen extends StatelessWidget {
                           validator: Validators.validateUsername,
                         ),
                         const SizedBox(height: 16),
-                        TextFormField(
+                        TogglePasswordField(
                           controller: passwordController,
-                          decoration: const InputDecoration(
-                            labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock),
-                            fillColor: Colors.white,
-                            filled: true,
-                          ),
-                          obscureText: true,
+                          labelText: 'Password',
                           validator: Validators.validatePassword,
                         ),
                         const SizedBox(height: 24),
