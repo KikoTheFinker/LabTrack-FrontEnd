@@ -26,7 +26,8 @@ class LoginScreen extends StatelessWidget {
             builder: (context) => LoginAnimation(onComplete: () {
                   authProvider.isStudent()
                       ? Navigator.pushReplacementNamed(context, '/student_home')
-                      : Navigator.pushReplacementNamed(context, '/professor_home');
+                      : Navigator.pushReplacementNamed(
+                          context, '/professor_home');
                 })),
       );
     } else {
@@ -43,7 +44,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('LabTrack'),
+        title: const Text(
+          'LabTrack',
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
@@ -113,16 +117,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-          const Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 16.0),
-              child: Text(
-                "© 2024 LabTrack - All rights reserved",
-                style: TextStyle(color: Colors.blueGrey, fontSize: 12),
               ),
             ),
           ),
