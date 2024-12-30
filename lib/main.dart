@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lab_track/features/auth/auth.dart';
+import 'package:lab_track/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'core/theme/theme.dart';
 
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Lab Track',
       theme: appTheme,
-      home: LoginScreen(),
+      initialRoute: AppRoutes.login,
+      routes: AppRoutes.routes,
     );
   }
 }

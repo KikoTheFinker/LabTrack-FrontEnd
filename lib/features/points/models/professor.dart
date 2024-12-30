@@ -1,7 +1,8 @@
 import 'package:lab_track/features/auth/auth.dart';
+import 'package:lab_track/features/points/models/course.dart';
 
 class Professor extends User {
-  final List<String> assignedCourses;
+  final List<Course> assignedCourses;
 
   Professor({
     required super.id,

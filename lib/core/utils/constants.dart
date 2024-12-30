@@ -1,42 +1,13 @@
 import 'package:lab_track/features/points/models/laboratory_exercise.dart';
+import 'package:lab_track/features/points/models/professor.dart';
 import '../../features/auth/auth.dart';
 import '../../features/points/models/course.dart';
+import '../../features/points/models/student.dart';
 
-final List<User> users = [
-  User(
-    id: 1,
-    username: '222077',
-    password: 'password123',
-    role: UserRole.student,
-  ),
-  User(
-    id: 2,
-    username: '223145',
-    password: 'password123',
-    role: UserRole.student,
-  ),
-  User(
-    id: 3,
-    username: '213064',
-    password: 'password123',
-    role: UserRole.student,
-  ),
-  User(
-    id: 4,
-    username: 'petre',
-    password: 'petre123',
-    role: UserRole.professor,
-  ),
-  User(
-    id: 5,
-    username: 'elena',
-    password: 'elena123',
-    role: UserRole.assistant,
-  ),
-];
 final List<Course> courses = [
   Course(
     id: 1,
+    semester: 3,
     name: 'Algorithms and Data Structures',
     laboratoryExercises: [
       LaboratoryExercise(
@@ -65,6 +36,7 @@ final List<Course> courses = [
   ),
   Course(
     id: 2,
+    semester: 4,
     name: 'Operating Systems',
     laboratoryExercises: [
       LaboratoryExercise(
@@ -89,6 +61,49 @@ final List<Course> courses = [
         },
         maxPoints: 10,
       ),
+    ],
+  ),
+];
+final List<User> users = [
+  Student(
+    id: 1,
+    username: '222077',
+    password: 'password123',
+    courses: [
+      courses[0],
+      courses[1],
+    ],
+  ),
+  Student(
+    id: 2,
+    username: '223145',
+    password: 'password123',
+    courses: [
+      courses[0]
+    ],
+  ),
+  Student(
+    id: 3,
+    username: '213064',
+    password: 'password123',
+    courses: [
+      courses[1]
+    ],
+  ),
+  Professor(
+      id: 4,
+      username: 'petre',
+      password: 'petre123',
+      assignedCourses:[
+        courses[1]
+      ],
+  ),
+  Professor(
+    id: 5,
+    username: 'elena',
+    password: 'elena123',
+    assignedCourses: [
+      courses[0]
     ],
   ),
 ];

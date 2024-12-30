@@ -7,7 +7,7 @@ class AnimatedFadeWidget extends StatefulWidget {
   const AnimatedFadeWidget({
     super.key,
     required this.child,
-    this.delay = 1000,
+    this.delay = 200,
   });
 
   @override
@@ -15,22 +15,24 @@ class AnimatedFadeWidget extends StatefulWidget {
 }
 
 class _AnimatedFadeWidgetState extends State<AnimatedFadeWidget> {
-  double _opacity = 0;
+  double _opacity = 0.75;
 
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration(milliseconds: widget.delay), () {
-      setState(() {
-        _opacity = 1;
-      });
+      if (mounted) {
+        setState(() {
+          _opacity = 1;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedOpacity(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 600),
       opacity: _opacity,
       child: widget.child,
     );

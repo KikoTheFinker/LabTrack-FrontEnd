@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lab_track/core/widgets/animations/login_animation.dart';
 import 'package:lab_track/features/auth/auth.dart';
 import 'package:provider/provider.dart';
-import '../../../core/widgets/animated_fade_widget.dart';
+import '../../../core/widgets/animations/animated_fade_widget.dart';
 import '../../../core/utils/validators.dart';
 import '../../../core/widgets/toggle_password_field.dart';
 
@@ -19,7 +20,15 @@ class LoginScreen extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     if (authProvider.login(username, password)) {
-      print('Login successful');
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => LoginAnimation(onComplete: () {
+                  authProvider.isStudent()
+                      ? Navigator.pushReplacementNamed(context, '/student_home')
+                      : Navigator.pushReplacementNamed(context, '/professor_home');
+                })),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -36,6 +45,7 @@ class LoginScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('LabTrack'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Stack(
         children: [
