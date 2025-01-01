@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:lab_track/core/widgets/logout_popup.dart';
 import 'package:lab_track/features/auth/auth.dart';
 import 'package:provider/provider.dart';
+import '../../../core/theme/theme.dart';
 import '../models/student.dart';
+import 'course_details_screen.dart';
 
 class StudentHomePage extends StatefulWidget {
   const StudentHomePage({super.key});
@@ -36,7 +38,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: AppColors.primaryColor,
         title: const Text(
           'My Courses',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
@@ -73,7 +75,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 contentPadding: const EdgeInsets.symmetric(
                     vertical: 12.0, horizontal: 16.0),
                 hintText: 'Search courses...',
-                prefixIcon: const Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search, color: AppColors.primaryColor,),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: const BorderSide(color: Colors.grey),
@@ -90,7 +92,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
               value: _selectedSemester,
               hint: const Text('Filter by Semester'),
               isExpanded: true,
-              icon: const Icon(Icons.arrow_drop_down),
+              icon: const Icon(Icons.arrow_drop_down, color: AppColors.primaryColor),
               underline: const SizedBox(),
               borderRadius: BorderRadius.circular(12),
               style: const TextStyle(fontSize: 16, color: Colors.black),
@@ -117,7 +119,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   ? const Center(
                       child: Text(
                         'No courses found.',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
                       ),
                     )
                   : ListView.builder(
@@ -145,25 +147,29 @@ class _StudentHomePageState extends State<StudentHomePage> {
                                   course.name,
                                   style: const TextStyle(
                                       fontSize: 18,
-                                      fontWeight: FontWeight.w600),
+                                      fontWeight: FontWeight.w500),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
                                 subtitle: Text(
                                   'Semester ${course.semester}',
-                                  style: const TextStyle(color: Colors.grey),
+                                  style: const TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.w500),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
                                 trailing: const Icon(
                                   Icons.chevron_right,
-                                  color: Colors.blueAccent,
+                                  color: AppColors.secondaryColor
                                 ),
                                 onTap: () {
-                                  Navigator.pushNamed(
+                                  Navigator.push(
                                     context,
-                                    '/course_details',
-                                    arguments: course,
+                                    MaterialPageRoute(
+                                      builder: (context) => CourseDetailsScreen(
+                                        course: course,
+                                        studentId: currentUser.username.toString(),
+                                      ),
+                                    ),
                                   );
                                 },
                                 tileColor: Colors.white,

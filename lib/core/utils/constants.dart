@@ -40,7 +40,7 @@ final List<Course> courses = [
     name: 'Operating Systems',
     laboratoryExercises: [
       LaboratoryExercise(
-        id: 3,
+        id: 1,
         name: 'Processes and Threads',
         dateTime: DateTime(2024, 12, 21, 15, 0),
         studentPoints: {
@@ -51,7 +51,7 @@ final List<Course> courses = [
         maxPoints: 10,
       ),
       LaboratoryExercise(
-        id: 4,
+        id: 2,
         name: 'Memory Management',
         dateTime: DateTime(2024, 12, 28, 15, 0),
         studentPoints: {

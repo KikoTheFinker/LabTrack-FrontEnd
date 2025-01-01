@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/theme.dart';
+
 class LogoutPopup extends StatelessWidget {
   final VoidCallback onLogout;
 
@@ -43,7 +45,7 @@ class LogoutPopup extends StatelessWidget {
                 child: const Text(
                   'Cancel',
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: AppColors.primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -55,7 +57,7 @@ class LogoutPopup extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.primaryColor,
                   shape: RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(8),
