@@ -1,39 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:lab_track/core/theme/theme.dart';
-import 'package:lab_track/core/utils/course_filter.dart';
 import 'package:lab_track/core/widgets/logout_button.dart';
-import 'package:lab_track/core/widgets/search_and_filter.dart';
+import 'package:lab_track/features/points/presentation/professor/professor_course_details_screen.dart';
 import 'package:provider/provider.dart';
-
+import '../../../../core/theme/theme.dart';
+import '../../../../core/utils/course_filter.dart';
 import '../../../../core/widgets/course_list_view.dart';
+import '../../../../core/widgets/search_and_filter.dart';
 import '../../../../state/auth_provider.dart';
-import '../../models/student.dart';
-import 'student_course_details_screen.dart';
+import '../../models/professor.dart';
 
-class StudentHomeScreen extends StatefulWidget {
-  const StudentHomeScreen({super.key});
+class ProfessorHomeScreen extends StatefulWidget {
+  const ProfessorHomeScreen({super.key});
 
   @override
-  State<StudentHomeScreen> createState() => _StudentHomeScreenState();
+  State<ProfessorHomeScreen> createState() => _ProfessorHomeScreenState();
 }
 
-class _StudentHomeScreenState extends State<StudentHomeScreen> {
+class _ProfessorHomeScreenState extends State<ProfessorHomeScreen> {
   String _searchQuery = '';
   int? _selectedSemester;
 
   @override
   Widget build(BuildContext context) {
     final currentUser = Provider.of<AuthProvider>(context).currentUser;
-    if (currentUser == null) {
+    if (currentUser == null || currentUser is! Professor) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, '/');
       });
       return const Scaffold();
     }
-    final student = currentUser as Student;
+
+    final professorCourses = currentUser.assignedCourses;
 
     final filteredCourses = filterCourses(
-      courses: student.courses,
+      courses: professorCourses,
       searchQuery: _searchQuery,
       selectedSemester: _selectedSemester,
     );
@@ -43,7 +43,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.primaryColor,
         title: const Text(
-          'My Courses',
+          'Professor Dashboard',
           style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
@@ -66,7 +66,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               },
               selectedSemester: _selectedSemester,
               semesters: [
-                ...{...student.courses.map((course) => course.semester)}
+                ...{...professorCourses.map((course) => course.semester)}
               ],
               onSemesterChanged: (value) {
                 setState(() {
@@ -90,9 +90,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CourseDetailsScreen(
+                            builder: (context) => ProfessorCourseDetailsScreen(
                               course: course,
-                              studentId: currentUser.username.toString(),
                             ),
                           ),
                         );

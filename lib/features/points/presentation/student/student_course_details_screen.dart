@@ -62,7 +62,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-                  (context, index) {
+              (context, index) {
                 final lab = widget.course.laboratoryExercises![index];
                 final studentPoints =
                     lab.studentPoints[widget.studentId] ?? "Not graded";
@@ -123,7 +123,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                       Expanded(
                                         child: Column(
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               lab.name,
@@ -162,7 +162,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                         value: progress,
                                         backgroundColor: Colors.grey[200],
                                         valueColor:
-                                        const AlwaysStoppedAnimation<Color>(
+                                            const AlwaysStoppedAnimation<Color>(
                                           AppColors.primaryColor,
                                         ),
                                         minHeight: 6,
@@ -177,93 +177,93 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                             duration: const Duration(milliseconds: 200),
                             child: isExpanded
                                 ? Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.secondaryColor
-                                    .withOpacity(0.1),
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(15),
-                                  bottomRight: Radius.circular(15),
-                                ),
-                              ),
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: LabDetail(
-                                          icon: Icons.calendar_today,
-                                          title: 'Date',
-                                          value: lab.dateTime
-                                              .toLocal()
-                                              .toString()
-                                              .split(' ')[0],
-                                        ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.secondaryColor
+                                          .withOpacity(0.1),
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(15),
+                                        bottomRight: Radius.circular(15),
                                       ),
-                                      Expanded(
-                                        child: LabDetail(
-                                          icon: Icons.access_time,
-                                          title: 'Time',
-                                          value: lab.dateTime
-                                              .toLocal()
-                                              .toString()
-                                              .split(' ')[1]
-                                              .substring(0, 5),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Points',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Stack(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                            BorderRadius.circular(10),
-                                            child:
-                                            LinearProgressIndicator(
-                                              value: progress,
-                                              backgroundColor:
-                                              Colors.grey[200],
-                                              valueColor:
-                                              const AlwaysStoppedAnimation<
-                                                  Color>(
-                                                AppColors.primaryColor,
+                                    ),
+                                    padding: const EdgeInsets.all(16),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: LabDetail(
+                                                icon: Icons.calendar_today,
+                                                title: 'Date',
+                                                value: lab.dateTime
+                                                    .toLocal()
+                                                    .toString()
+                                                    .split(' ')[0],
                                               ),
-                                              minHeight: 20,
                                             ),
-                                          ),
-                                          Positioned.fill(
-                                            child: Center(
-                                              child: Text(
-                                                '$studentPoints / ${lab.maxPoints}',
-                                                style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  fontSize: 15,
+                                            Expanded(
+                                              child: LabDetail(
+                                                icon: Icons.access_time,
+                                                title: 'Time',
+                                                value: lab.dateTime
+                                                    .toLocal()
+                                                    .toString()
+                                                    .split(' ')[1]
+                                                    .substring(0, 5),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 16),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              'Points',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Stack(
+                                              children: [
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child:
+                                                      LinearProgressIndicator(
+                                                    value: progress,
+                                                    backgroundColor:
+                                                        Colors.grey[200],
+                                                    valueColor:
+                                                        const AlwaysStoppedAnimation<
+                                                            Color>(
+                                                      AppColors.primaryColor,
+                                                    ),
+                                                    minHeight: 20,
+                                                  ),
                                                 ),
-                                              ),
+                                                Positioned.fill(
+                                                  child: Center(
+                                                    child: Text(
+                                                      '$studentPoints / ${lab.maxPoints}',
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 : Container(),
                           ),
                         ],
