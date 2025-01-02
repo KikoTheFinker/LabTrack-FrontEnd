@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../features/auth/auth.dart';
-import '../features/points/presentation/student_home_screen.dart';
+import '../features/points/presentation/student/student_home_screen.dart';
 import '../features/points/presentation/search_screen.dart';
 
 class AppRoutes{

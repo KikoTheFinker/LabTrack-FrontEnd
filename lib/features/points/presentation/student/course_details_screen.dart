@@ -40,25 +40,17 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
               onPressed: () => Navigator.pop(context),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 56, bottom: 8),
+              titlePadding: const EdgeInsets.only(left: 50, bottom: 15),
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
-                    'LABORATORY EXERCISES',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                    ),
-                  ),
                   Text(
                     widget.course.name,
                     style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white70,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -120,7 +112,7 @@ class _CourseDetailsScreenState extends State<CourseDetailsScreen> {
                                           child: Text(
                                             '${lab.id}',
                                             style: const TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 18,
                                               fontWeight: FontWeight.w600,
                                               color: AppColors.primaryColor,
                                             ),
