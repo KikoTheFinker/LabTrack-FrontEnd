@@ -73,6 +73,8 @@ class DataHolder extends ChangeNotifier {
     username: '222077',
     password: 'password123',
     courses: [courses[0], courses[1]],
+    name: 'Кристијан',
+    surname: 'Стојановски',
   );
 
   static final Student student2 = Student(
@@ -80,6 +82,8 @@ class DataHolder extends ChangeNotifier {
     username: '223145',
     password: 'password123',
     courses: [courses[0]],
+    name: 'Горазд',
+    surname: 'Бишковски',
   );
 
   static final Student student3 = Student(
@@ -87,13 +91,15 @@ class DataHolder extends ChangeNotifier {
     username: '213064',
     password: 'password123',
     courses: [courses[1], courses[0]],
+    name: 'Верче',
+    surname: 'Петрушевска',
   );
 
   static final Professor professor1 = Professor(
     id: 4,
     username: 'petre',
     password: 'petre123',
-    assignedCourses: [courses[1]],
+    assignedCourses: [courses[0], courses[1]],
   );
 
   static final Professor professor2 = Professor(

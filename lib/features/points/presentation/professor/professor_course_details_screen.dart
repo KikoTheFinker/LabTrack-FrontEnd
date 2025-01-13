@@ -58,7 +58,7 @@ class _ProfessorCourseDetailsScreenState
               itemBuilder: (context, index) {
                 final student = filteredStudents[index];
                 return ListTile(
-                  title: Text(student.username),
+                  title: Text("${student.name} ${student.surname}"),
                   subtitle: Text('Index: ${student.username}'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
