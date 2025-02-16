@@ -1,5 +1,6 @@
-import 'package:lab_track/features/auth/auth.dart';
 import 'package:lab_track/features/points/models/course.dart';
+
+import '../../auth/models/user.dart';
 
 class Professor extends User {
   final List<Course> assignedCourses;

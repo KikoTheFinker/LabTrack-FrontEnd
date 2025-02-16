@@ -1,43 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lab_track/core/widgets/animations/login_animation.dart';
-import 'package:lab_track/features/auth/auth.dart';
 import 'package:provider/provider.dart';
-import '../../../core/widgets/animations/animated_fade_widget.dart';
+
 import '../../../core/utils/validators.dart';
+import '../../../core/widgets/animations/animated_fade_widget.dart';
 import '../../../core/widgets/toggle_password_field.dart';
+import '../../../routes/app_routes.dart';
+import '../../../state/auth_provider.dart';
 
 class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   LoginScreen({super.key});
 
-  void _handleLogin(BuildContext context) {
+  Future<void> _handleLogin(BuildContext context) async {
     final username = usernameController.text;
     final password = passwordController.text;
-
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-    if (authProvider.login(username, password)) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => LoginAnimation(onComplete: () {
-                  authProvider.isStudent()
-                      ? Navigator.pushReplacementNamed(context, '/student_home')
-                      : Navigator.pushReplacementNamed(
-                          context, '/professor_home');
-                })),
-      );
+    bool success = await authProvider.login(username, password);
+
+    if (success) {
+      String? token = authProvider.token;
+      String? role = authProvider.role;
+
+      if (role == "STUDENT") {
+        _navigateWithAnimation(context, AppRoutes.studentHome);
+        print(token);
+      } else if (role == "PROFESSOR") {
+        print(token);
+        _navigateWithAnimation(context, AppRoutes.professorHome);
+      } else {
+        _showErrorSnackbar(context, "Invalid role in token");
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid username or password'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showErrorSnackbar(context, "Invalid username or password");
     }
+  }
+
+  void _navigateWithAnimation(BuildContext context, String route) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginAnimation(
+          onComplete: () => Navigator.pushReplacementNamed(context, route),
+        ),
+      ),
+    );
+  }
+
+  void _showErrorSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override

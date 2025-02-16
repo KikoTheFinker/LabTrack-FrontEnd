@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lab_track/core/utils/data_holder.dart';
-import 'package:lab_track/features/auth/auth.dart';
 import 'package:lab_track/routes/app_routes.dart';
+import 'package:lab_track/state/auth_provider.dart';
 import 'package:provider/provider.dart';
+
 import 'core/theme/theme.dart';
 
 void main() {

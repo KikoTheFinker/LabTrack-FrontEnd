@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lab_track/core/theme/theme.dart';
 import 'package:lab_track/core/utils/course_filter.dart';
+import 'package:lab_track/core/utils/data_holder.dart';
 import 'package:lab_track/core/widgets/logout_button.dart';
 import 'package:lab_track/core/widgets/search_and_filter.dart';
 import 'package:provider/provider.dart';
@@ -23,14 +24,14 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<AuthProvider>(context).currentUser;
+    final currentUser = Provider.of<AuthProvider>(context).token;
     if (currentUser == null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacementNamed(context, '/');
       });
       return const Scaffold();
     }
-    final student = currentUser as Student;
+    final student = DataHolder.student1;
 
     final filteredCourses = filterCourses(
       courses: student.courses,
@@ -92,7 +93,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           MaterialPageRoute(
                             builder: (context) => CourseDetailsScreen(
                               course: course,
-                              studentId: currentUser.username.toString(),
+                              studentId: currentUser.toString(),
                             ),
                           ),
                         );

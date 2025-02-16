@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lab_track/features/points/models/laboratory_exercise.dart';
 import 'package:lab_track/features/points/models/professor.dart';
 import 'package:lab_track/features/points/models/student.dart';
-import '../../features/auth/auth.dart';
+
+import '../../features/auth/models/user.dart';
 import '../../features/points/models/course.dart';
 
 class DataHolder extends ChangeNotifier {
@@ -127,7 +128,6 @@ class DataHolder extends ChangeNotifier {
       required LaboratoryExercise lab,
       required String studentUsername,
       required int newPoints}) {
-
     lab.studentPoints[studentUsername] = newPoints;
     notifyListeners();
   }

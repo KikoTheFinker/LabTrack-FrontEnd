@@ -1,4 +1,4 @@
-import 'package:lab_track/features/auth/auth.dart';
+import '../../auth/models/user.dart';
 import 'course.dart';
 
 class Student extends User {
