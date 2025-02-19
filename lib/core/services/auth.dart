@@ -1,21 +1,19 @@
 import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:http/http.dart' as http;
+import 'package:lab_track/core/services/api.dart';
 
 class AuthService {
-  static const String baseUrl = "http://localhost:8000";
   static const FlutterSecureStorage _storage = FlutterSecureStorage();
 
   static Future<bool> login(String username, String password) async {
-    final response = await http.post(
-      Uri.parse("$baseUrl/login"),
-      headers: {"Content-Type": "application/json"},
+    final response = await ApiService.post(
+      "/login",
       body: jsonEncode({"username": username, "password": password}),
     );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final String token = data["access_token"];
+    if (response != null && response["access_token"] != null) {
+      final String token = response["access_token"];
 
       await _storage.write(key: "token", value: token);
       await _storage.write(key: "role", value: _decodeTokenRole(token));
@@ -46,7 +44,8 @@ class AuthService {
         throw Exception("Invalid JWT token");
       }
 
-      final payload = utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+      final payload =
+          utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
       final Map<String, dynamic> decoded = jsonDecode(payload);
 
       return decoded["role"];

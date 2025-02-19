@@ -14,4 +14,17 @@ class Student extends User {
     required super.username,
     required super.password,
   }) : super(role: UserRole.student);
+
+  factory Student.fromJson(Map<String, dynamic> studentData) {
+    return Student(
+      id: studentData['id'],
+      username: studentData['username'],
+      password: studentData['password'],
+      name: studentData['name'],
+      surname: studentData['surname'],
+      courses: List<Course>.from(
+        studentData['courses'].map((courseData) => Course.fromJson(courseData)),
+      ),
+    );
+  }
 }

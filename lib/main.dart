@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:lab_track/core/utils/data_holder.dart';
 import 'package:lab_track/routes/app_routes.dart';
 import 'package:lab_track/state/auth_provider.dart';
+import 'package:lab_track/state/course_details_provider.dart';
+import 'package:lab_track/state/course_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'core/theme/theme.dart';
 
 void main() {
-  initializeData();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => DataHolder()),
+        ChangeNotifierProvider(create: (context) => CourseProvider()),
+        ChangeNotifierProvider(create: (context) => CourseDetailsProvider()),
       ],
       child: const MyApp(),
     ),

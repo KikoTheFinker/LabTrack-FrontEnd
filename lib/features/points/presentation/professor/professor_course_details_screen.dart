@@ -19,7 +19,7 @@ class _ProfessorCourseDetailsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final filteredStudents = (widget.course.students).where((student) {
+    final filteredStudents = (widget.course.students)?.where((student) {
       return _searchQuery.isEmpty ||
           student.username.toLowerCase().contains(_searchQuery.toLowerCase());
     }).toList();
@@ -51,7 +51,7 @@ class _ProfessorCourseDetailsScreenState
             ),
           ),
           Expanded(
-            child: filteredStudents.isEmpty
+            child: filteredStudents!.isEmpty
                 ? const Center(child: Text('No students found.'))
                 : ListView.builder(
               itemCount: filteredStudents.length,
@@ -61,17 +61,17 @@ class _ProfessorCourseDetailsScreenState
                   title: Text("${student.name} ${student.surname}"),
                   subtitle: Text('Index: ${student.username}'),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => StudentDetailsScreen(
-                          student: student,
-                          course: widget.course,
-                        ),
-                      ),
-                    );
-                  },
+                  // onTap: () {
+                  //   Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //       builder: (context) => StudentDetailsScreen(
+                  //         student: student,
+                  //         course: widget.course,
+                  //       ),
+                  //     ),
+                  //   );
+                  // },
                 );
               },
             ),

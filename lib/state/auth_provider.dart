@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lab_track/features/auth/auth.dart';
+import 'package:lab_track/core/services/auth.dart';
 import 'dart:convert';
 
 class AuthProvider with ChangeNotifier {
@@ -39,11 +39,11 @@ class AuthProvider with ChangeNotifier {
   }
 
   bool isStudent() {
-    return _role == "student";
+    return _role == "STUDENT";
   }
 
   bool isProfessor() {
-    return _role == "professor";
+    return _role == "PROFESSOR" || role == "ASSISTANT";
   }
 
   String? _decodeTokenRole(String token) {

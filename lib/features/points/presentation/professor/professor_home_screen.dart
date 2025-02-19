@@ -48,7 +48,11 @@ class _ProfessorHomeScreenState extends State<ProfessorHomeScreen> {
       });
       return const Scaffold();
     }
-    final Professor professor1 = DataHolder.professor1;
+    final Professor professor1 = Professor(
+     id: 4,
+     username: 'test',
+     password: 'test', assignedCourses: [],
+  );
     final professorCourses = professor1.assignedCourses;
 
     final filteredCourses = filterCourses(

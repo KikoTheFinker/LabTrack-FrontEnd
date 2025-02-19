@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:lab_track/core/widgets/animations/login_animation.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +12,6 @@ class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
 
   LoginScreen({super.key});
 
@@ -25,14 +23,11 @@ class LoginScreen extends StatelessWidget {
     bool success = await authProvider.login(username, password);
 
     if (success) {
-      String? token = authProvider.token;
       String? role = authProvider.role;
 
       if (role == "STUDENT") {
         _navigateWithAnimation(context, AppRoutes.studentHome);
-        print(token);
-      } else if (role == "PROFESSOR") {
-        print(token);
+      } else if (role == "PROFESSOR" || role == "ASSISTANT") {
         _navigateWithAnimation(context, AppRoutes.professorHome);
       } else {
         _showErrorSnackbar(context, "Invalid role in token");

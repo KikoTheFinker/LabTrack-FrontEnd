@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:lab_track/core/theme/theme.dart';
-import 'package:lab_track/core/utils/course_filter.dart';
-import 'package:lab_track/core/utils/data_holder.dart';
+import 'package:lab_track/core/widgets/course_list_view.dart';
 import 'package:lab_track/core/widgets/logout_button.dart';
 import 'package:lab_track/core/widgets/search_and_filter.dart';
+import 'package:lab_track/features/points/models/laboratory_exercise.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/widgets/course_list_view.dart';
 import '../../../../state/auth_provider.dart';
-import '../../models/student.dart';
+import '../../../../state/course_details_provider.dart';
+import '../../../../state/course_provider.dart';
+import '../../models/course.dart';
 import 'student_course_details_screen.dart';
 
 class StudentHomeScreen extends StatefulWidget {
@@ -23,21 +24,24 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   int? _selectedSemester;
 
   @override
-  Widget build(BuildContext context) {
-    final currentUser = Provider.of<AuthProvider>(context).token;
-    if (currentUser == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, '/');
-      });
-      return const Scaffold();
-    }
-    final student = DataHolder.student1;
+  void initState() {
+    super.initState();
+    Provider.of<CourseProvider>(context, listen: false).fetchCourses(context);
+  }
 
-    final filteredCourses = filterCourses(
-      courses: student.courses,
-      searchQuery: _searchQuery,
-      selectedSemester: _selectedSemester,
-    );
+  @override
+  Widget build(BuildContext context) {
+    final courseProvider = Provider.of<CourseProvider>(context);
+    final allCourses = courseProvider.courses;
+
+    List<Course> filteredCourses = allCourses.where((course) {
+      final matchesSearch = course.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          course.code.toLowerCase().contains(_searchQuery.toLowerCase());
+
+      final matchesSemester = _selectedSemester == null || course.semester == _selectedSemester;
+
+      return matchesSearch && matchesSemester;
+    }).toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -66,9 +70,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 });
               },
               selectedSemester: _selectedSemester,
-              semesters: [
-                ...{...student.courses.map((course) => course.semester)}
-              ],
+              semesters: allCourses.map((course) => course.semester).toSet().toList(),
               onSemesterChanged: (value) {
                 setState(() {
                   _selectedSemester = value;
@@ -77,28 +79,43 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
             ),
             const SizedBox(height: 24),
             Expanded(
-              child: filteredCourses.isEmpty
+              child: courseProvider.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : courseProvider.errorMessage != null
+                  ? Center(
+                child: Text(
+                  courseProvider.errorMessage!,
+                  style: const TextStyle(fontSize: 16, color: Colors.red),
+                ),
+              )
+                  : filteredCourses.isEmpty
                   ? const Center(
-                      child: Text(
-                        'No courses found.',
-                        style: TextStyle(
-                            fontSize: 16, color: AppColors.primaryColor),
-                      ),
-                    )
+                child: Text(
+                  'No courses found.',
+                  style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
+                ),
+              )
                   : CourseListView(
-                      courses: filteredCourses,
-                      onCourseTap: (course) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CourseDetailsScreen(
-                              course: course,
-                              studentId: currentUser.toString(),
-                            ),
-                          ),
-                        );
-                      },
+                courses: filteredCourses,
+                onCourseTap: (course) async {
+                  final courseDetailsProvider =
+                  Provider.of<CourseDetailsProvider>(context, listen: false);
+
+                  await courseDetailsProvider.fetchStudentLaboratoryExercises(context, course.id);
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CourseDetailsScreen(
+                        laboratoryExercises: courseDetailsProvider.laboratoryExercises,
+                        courseId: course.id,
+                        studentId: Provider.of<AuthProvider>(context, listen: false).token.toString(),
+                        courseName: course.name,
+                      ),
                     ),
+                  );
+                },
+              ),
             ),
           ],
         ),
