@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:lab_track/core/utils/data_holder.dart';
 import 'package:lab_track/core/widgets/logout_button.dart';
 import 'package:lab_track/features/points/presentation/professor/professor_course_details_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/theme/theme.dart';
-import '../../../../core/utils/course_filter.dart';
 import '../../../../core/widgets/course_list_view.dart';
 import '../../../../core/widgets/search_and_filter.dart';
-import '../../../../state/auth_provider.dart';
-import '../../models/course.dart';
-import '../../models/professor.dart';
+import '../../../../state/course_provider.dart';
 
 class ProfessorHomeScreen extends StatefulWidget {
   const ProfessorHomeScreen({super.key});
@@ -23,43 +19,47 @@ class ProfessorHomeScreen extends StatefulWidget {
 class _ProfessorHomeScreenState extends State<ProfessorHomeScreen> {
   String _searchQuery = '';
   int? _selectedSemester;
-  String _token = "";
+  bool _isTokenValid = false;
 
   @override
   void initState() {
     super.initState();
-    _getToken();
+    _checkTokenAndFetchCourses();
   }
 
-  Future<void> _getToken() async {
+  Future<void> _checkTokenAndFetchCourses() async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     String? token = await storage.read(key: "token");
-    setState(() {
-      _token = token ?? "No token found";
-    });
+
+    if (token == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacementNamed(context, '/login');
+      });
+    } else {
+      setState(() {
+        _isTokenValid = true;
+      });
+      Provider.of<CourseProvider>(context, listen: false).fetchUserCourses(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentUser = Provider.of<AuthProvider>(context).token;
-    if (currentUser == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacementNamed(context, '/');
-      });
+    if (!_isTokenValid) {
       return const Scaffold();
     }
-    final Professor professor1 = Professor(
-     id: 4,
-     username: 'test',
-     password: 'test', assignedCourses: [],
-  );
-    final professorCourses = professor1.assignedCourses;
 
-    final filteredCourses = filterCourses(
-      courses: professorCourses,
-      searchQuery: _searchQuery,
-      selectedSemester: _selectedSemester,
-    );
+    final courseProvider = Provider.of<CourseProvider>(context);
+    final allCourses = courseProvider.courses;
+
+    final filteredCourses = allCourses.where((course) {
+      final matchesSearch = course.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          course.code.toLowerCase().contains(_searchQuery.toLowerCase());
+
+      final matchesSemester = _selectedSemester == null || course.semester == _selectedSemester;
+
+      return matchesSearch && matchesSemester;
+    }).toList();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -80,11 +80,6 @@ class _ProfessorHomeScreenState extends State<ProfessorHomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Token: $_token',
-              style: const TextStyle(fontSize: 16, color: Colors.black),
-            ),
-            const SizedBox(height: 24),
             SearchAndFilterBar(
               searchQuery: _searchQuery,
               onSearchChanged: (value) {
@@ -93,9 +88,7 @@ class _ProfessorHomeScreenState extends State<ProfessorHomeScreen> {
                 });
               },
               selectedSemester: _selectedSemester,
-              semesters: [
-                ...{...professorCourses.map((course) => course.semester)}
-              ],
+              semesters: allCourses.map((course) => course.semester).toSet().toList(),
               onSemesterChanged: (value) {
                 setState(() {
                   _selectedSemester = value;
@@ -104,12 +97,20 @@ class _ProfessorHomeScreenState extends State<ProfessorHomeScreen> {
             ),
             const SizedBox(height: 24),
             Expanded(
-              child: filteredCourses.isEmpty
+              child: courseProvider.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : courseProvider.errorMessage != null
+                  ? Center(
+                child: Text(
+                  courseProvider.errorMessage!,
+                  style: const TextStyle(fontSize: 16, color: Colors.red),
+                ),
+              )
+                  : filteredCourses.isEmpty
                   ? const Center(
                 child: Text(
                   'No courses found.',
-                  style: TextStyle(
-                      fontSize: 16, color: AppColors.primaryColor),
+                  style: TextStyle(fontSize: 16, color: AppColors.primaryColor),
                 ),
               )
                   : CourseListView(

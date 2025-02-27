@@ -16,7 +16,7 @@ class CourseProvider extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
-  Future<void> fetchCourses(BuildContext context) async {
+  Future<void> fetchUserCourses(BuildContext context) async {
     final token = Provider.of<AuthProvider>(context, listen: false).token;
 
     if (token == null) {

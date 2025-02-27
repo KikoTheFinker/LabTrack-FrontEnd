@@ -3,7 +3,6 @@ import 'package:lab_track/core/theme/theme.dart';
 import 'package:lab_track/core/widgets/course_list_view.dart';
 import 'package:lab_track/core/widgets/logout_button.dart';
 import 'package:lab_track/core/widgets/search_and_filter.dart';
-import 'package:lab_track/features/points/models/laboratory_exercise.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../state/auth_provider.dart';
@@ -26,7 +25,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<CourseProvider>(context, listen: false).fetchCourses(context);
+    Provider.of<CourseProvider>(context, listen: false).fetchUserCourses(context);
   }
 
   @override

@@ -23,11 +23,9 @@ class LoginScreen extends StatelessWidget {
     bool success = await authProvider.login(username, password);
 
     if (success) {
-      String? role = authProvider.role;
-
-      if (role == "STUDENT") {
+      if (authProvider.isStudent()) {
         _navigateWithAnimation(context, AppRoutes.studentHome);
-      } else if (role == "PROFESSOR" || role == "ASSISTANT") {
+      } else if (authProvider.isProfessor()) {
         _navigateWithAnimation(context, AppRoutes.professorHome);
       } else {
         _showErrorSnackbar(context, "Invalid role in token");
